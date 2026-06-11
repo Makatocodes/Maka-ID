@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security & Privacy - MyWallet PH</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+theme:{
+extend:{
+fontFamily:{
+sans:['Plus Jakarta Sans','sans-serif']
+},
+colors:{
+brand:{
+700:'#334e68',
+800:'#243b53',
+900:'#102a43'
+}
+}
+}
+}
+}
+</script>
+
+<style>
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+</style>
+
+</head>
+<body class="bg-slate-50">
+
+<div class="max-w-md mx-auto min-h-screen bg-white">
+
+<!-- HEADER -->
+<div class="p-4 flex items-center border-b border-slate-200 bg-white sticky top-0">
+
+<button onclick="history.back()"
+class="w-10 h-10 rounded-full bg-slate-100">
+<i class="fa-solid fa-arrow-left"></i>
+</button>
+
+<h1 class="ml-4 font-bold text-lg">
+Security & Privacy
+</h1>
+
+</div>
+
+<!-- CONTENT -->
+<div class="p-5 space-y-5">
+
+<!-- STATUS -->
+<div class="bg-green-50 border border-green-200 rounded-xl p-4">
+
+<h3 class="font-bold text-green-700">
+Lock Screen Status
+</h3>
+
+<p id="lockStatus"
+class="text-sm mt-2">
+Enabled
+</p>
+
+</div>
+
+<!-- TOGGLE LOCK -->
+<div class="bg-white border rounded-xl p-4">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<h4 class="font-bold">
+Enable Lock Screen
+</h4>
+
+<p class="text-xs text-slate-500">
+Require PIN before opening wallet
+</p>
+
+</div>
+
+<input
+type="checkbox"
+id="lockToggle"
+class="w-5 h-5">
+
+</div>
+
+</div>
+
+<!-- CHANGE PIN -->
+<div class="bg-white border rounded-xl p-4">
+
+<h4 class="font-bold mb-3">
+Change PIN
+</h4>
+
+<input
+type="password"
+id="newPin"
+maxlength="4"
+placeholder="Enter New 4 Digit PIN"
+class="w-full border rounded-lg p-3">
+
+<button
+onclick="changePin()"
+class="w-full mt-3 bg-brand-900 text-white py-3 rounded-lg font-bold">
+
+Save New PIN
+
+</button>
+
+</div>
+
+<!-- RESET PIN -->
+<div class="bg-white border rounded-xl p-4">
+
+<h4 class="font-bold mb-2">
+Reset PIN
+</h4>
+
+<p class="text-xs text-slate-500 mb-3">
+Delete current PIN and create a new one next login.
+</p>
+
+<button
+onclick="resetPin()"
+class="w-full bg-yellow-500 text-white py-3 rounded-lg font-bold">
+
+Reset PIN
+
+</button>
+
+</div>
+
+<!-- RESET WALLET -->
+<div class="bg-red-50 border border-red-200 rounded-xl p-4">
+
+<h4 class="font-bold text-red-600 mb-2">
+Danger Zone
+</h4>
+
+<p class="text-xs text-red-500 mb-3">
+This will permanently delete all wallet data.
+</p>
+
+<button
+onclick="resetWallet()"
+class="w-full bg-red-600 text-white py-3 rounded-lg font-bold">
+
+Delete All Wallet Data
+
+</button>
+
+</div>
+
+<!-- MESSAGE -->
+<div
+id="messageBox"
+class="hidden text-center p-3 rounded-xl bg-green-100 text-green-700 font-semibold">
+Success
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const toggle =
+document.getElementById("lockToggle");
+
+const status =
+document.getElementById("lockStatus");
+
+const savedLock =
+localStorage.getItem(
+"walletLockEnabled"
+);
+
+if(savedLock === null){
+
+localStorage.setItem(
+"walletLockEnabled",
+"true"
+);
+
+toggle.checked = true;
+
+}else{
+
+toggle.checked =
+savedLock === "true";
+
+}
+
+updateStatus();
+
+toggle.addEventListener(
+"change",
+function(){
+
+localStorage.setItem(
+"walletLockEnabled",
+toggle.checked
+);
+
+updateStatus();
+
+}
+);
+
+function updateStatus(){
+
+if(toggle.checked){
+
+status.innerHTML =
+"<span class='text-green-600 font-bold'>Enabled</span>";
+
+}else{
+
+status.innerHTML =
+"<span class='text-red-600 font-bold'>Disabled</span>";
+
+}
+
+}
+
+function showMessage(text){
+
+const box =
+document.getElementById(
+"messageBox"
+);
+
+box.textContent = text;
+
+box.classList.remove(
+"hidden"
+);
+
+setTimeout(()=>{
+
+box.classList.add(
+"hidden"
+);
+
+},2000);
+
+}
+
+function changePin(){
+
+const pin =
+document.getElementById(
+"newPin"
+).value;
+
+if(pin.length !== 4){
+
+alert(
+"PIN must be exactly 4 digits."
+);
+
+return;
+
+}
+
+localStorage.setItem(
+"walletPin",
+pin
+);
+
+showMessage(
+"PIN Updated Successfully"
+);
+
+document.getElementById(
+"newPin"
+).value = "";
+
+}
+
+function resetPin(){
+
+if(confirm(
+"Delete current PIN?"
+)){
+
+localStorage.removeItem(
+"walletPin"
+);
+
+showMessage(
+"PIN Deleted"
+);
+
+}
+
+}
+
+function resetWallet(){
+
+if(confirm(
+"Delete ALL wallet data?"
+)){
+
+localStorage.clear();
+
+alert(
+"Wallet Data Deleted"
+);
+
+location.href =
+"index.html";
+
+}
+
+}
+
+</script>
+<script src="js/security.js"></script>
+</body>
+</html>

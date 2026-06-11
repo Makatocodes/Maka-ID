@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rate App - MyWallet PH</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+theme:{
+extend:{
+fontFamily:{
+sans:['Plus Jakarta Sans','sans-serif']
+},
+colors:{
+brand:{
+700:'#334e68',
+800:'#243b53',
+900:'#102a43'
+}
+}
+}
+}
+}
+</script>
+
+<style>
+
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.star{
+cursor:pointer;
+transition:.2s;
+}
+
+.star.active{
+color:#facc15;
+transform:scale(1.1);
+}
+
+</style>
+
+</head>
+
+<body class="bg-slate-50">
+
+<div class="max-w-md mx-auto min-h-screen bg-white">
+
+<!-- Header -->
+
+<div class="p-4 flex items-center border-b">
+
+<button onclick="history.back()"
+class="w-10 h-10 rounded-full bg-slate-100">
+<i class="fa-solid fa-arrow-left"></i>
+</button>
+
+<h1 class="ml-4 font-bold text-lg">
+Rate App
+</h1>
+
+</div>
+
+<div class="p-6 text-center">
+
+<div class="text-6xl text-yellow-400 mb-5">
+<i class="fa-solid fa-star"></i>
+</div>
+
+<h2 class="font-bold text-2xl">
+Rate MyWallet PH
+</h2>
+
+<p class="text-slate-500 mt-2">
+Share your experience with the app.
+</p>
+
+<!-- Stars -->
+
+<div class="flex justify-center gap-3 mt-8">
+
+<i class="fa-solid fa-star star text-4xl text-slate-300" data-rating="1"></i>
+
+<i class="fa-solid fa-star star text-4xl text-slate-300" data-rating="2"></i>
+
+<i class="fa-solid fa-star star text-4xl text-slate-300" data-rating="3"></i>
+
+<i class="fa-solid fa-star star text-4xl text-slate-300" data-rating="4"></i>
+
+<i class="fa-solid fa-star star text-4xl text-slate-300" data-rating="5"></i>
+
+</div>
+
+<button
+onclick="saveRating()"
+class="w-full mt-8 bg-brand-900 text-white py-4 rounded-xl font-bold">
+
+Submit Rating
+
+</button>
+
+<div
+id="message"
+class="hidden mt-4 bg-green-100 text-green-700 p-3 rounded-xl">
+
+Thank you for rating MyWallet PH!
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let currentRating = 0;
+
+const stars =
+document.querySelectorAll(".star");
+
+const saved =
+localStorage.getItem(
+"walletRating"
+);
+
+if(saved){
+
+currentRating =
+parseInt(saved);
+
+paintStars();
+
+}
+
+stars.forEach(star=>{
+
+star.addEventListener(
+"click",
+function(){
+
+currentRating =
+parseInt(
+this.dataset.rating
+);
+
+paintStars();
+
+});
+
+});
+
+function paintStars(){
+
+stars.forEach(star=>{
+
+star.classList.remove(
+"active",
+"text-yellow-400"
+);
+
+star.classList.add(
+"text-slate-300"
+);
+
+if(
+parseInt(star.dataset.rating)
+<= currentRating
+){
+
+star.classList.remove(
+"text-slate-300"
+);
+
+star.classList.add(
+"text-yellow-400",
+"active"
+);
+
+}
+
+});
+
+}
+
+function saveRating(){
+
+if(currentRating === 0){
+
+alert(
+"Please select a rating."
+);
+
+return;
+
+}
+
+localStorage.setItem(
+"walletRating",
+currentRating
+);
+
+document
+.getElementById("message")
+.classList
+.remove("hidden");
+
+setTimeout(()=>{
+
+document
+.getElementById("message")
+.classList
+.add("hidden");
+
+},2500);
+
+}
+
+</script>
+
+</body>
+</html>

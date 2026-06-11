@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page title</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], },
+                    colors: {
+                        brand: { 50: '#f0f4f8', 100: '#d9e3ed', 700: '#334e68', 800: '#243b53', 900: '#102a43', }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body{
+    margin:0;
+    height:100vh;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    background:linear-gradient(
+        135deg,
+        #102a43,
+        #243b53,
+        #334e68
+    );
+    overflow:hidden;
+}
+
+.splash-container{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.logo i{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.logo h1{
+    margin:0;
+    font-size:32px;
+    font-weight:800;
+}
+
+.wallet-card{
+    width:320px;
+    height:190px;
+    border-radius:24px;
+    background:linear-gradient(
+        135deg,
+        #102a43,
+        #243b53
+    );
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+    animation:floatCard 3s ease-in-out infinite;
+    margin-bottom:40px;
+}
+
+.wallet-card::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:80px;
+    height:100%;
+    background:rgba(255,255,255,.2);
+    transform:skewX(-20deg);
+    animation:shine 3s linear infinite;
+}
+
+.card-chip{
+    width:55px;
+    height:40px;
+    border-radius:8px;
+    background:gold;
+    margin:25px;
+}
+
+.card-content{
+    padding:0 25px;
+}
+
+.card-content h3{
+    margin:0;
+    font-size:22px;
+    font-weight:700;
+}
+
+.card-content p{
+    margin-top:8px;
+    opacity:.8;
+}
+
+.loader{
+    width:280px;
+    height:8px;
+    background:rgba(255,255,255,.2);
+    border-radius:50px;
+    overflow:hidden;
+}
+
+.loader-bar{
+    width:0%;
+    height:100%;
+    background:white;
+    animation:loadingBar 3s linear forwards;
+}
+
+#loadingText{
+    margin-top:15px;
+    font-size:14px;
+    font-weight:600;
+}
+
+@keyframes loadingBar{
+    from{
+        width:0%;
+    }
+    to{
+        width:100%;
+    }
+}
+    @keyframes floatCard {
+    0%,100%{
+        transform:translateY(0px) rotate(-2deg);
+    }
+    50%{
+        transform:translateY(-15px) rotate(2deg);
+    }
+}
+
+@keyframes shine {
+    from{
+        left:-100%;
+    }
+    to{
+        left:200%;
+    }
+}
+</style>
+</head>
+<body>
+<div class="splash-container">
+
+    <div class="logo">
+        <i class="fa-solid fa-fingerprint"></i>
+        <h1>MyWallet PH</h1>
+    </div>
+
+    <div class="wallet-card">
+
+        <div class="card-chip"></div>
+
+        <div class="card-content">
+            <h3>Digital Identity</h3>
+            <p>Secure • Private • Local</p>
+        </div>
+
+        <div class="card-glow"></div>
+
+    </div>
+
+    <div class="loader">
+        <div class="loader-bar"></div>
+    </div>
+
+    <p id="loadingText">Loading 0%</p>
+
+</div>
+
+</body>
+    <script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+    const loadingText =
+        document.getElementById("loadingText");
+
+    let progress = 0;
+
+    const interval = setInterval(()=>{
+
+        progress++;
+
+        loadingText.textContent =
+            `Loading ${progress}%`;
+
+        if(progress >= 100){
+
+            clearInterval(interval);
+
+            setTimeout(()=>{
+                location.href = "lock.html";
+            },300);
+
+        }
+
+    },30);
+
+});
+</script>
+</html>

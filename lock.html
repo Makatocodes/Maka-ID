@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyWallet PH Lock</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+body{
+height:100vh;
+background:linear-gradient(135deg,#102a43,#243b53,#334e68);
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+.lock-container{
+width:100%;
+max-width:400px;
+padding:25px;
+display:flex;
+flex-direction:column;
+align-items:center;
+color:white;
+}
+
+.logo{
+text-align:center;
+margin-bottom:30px;
+}
+
+.logo i{
+font-size:70px;
+margin-bottom:15px;
+animation:pulse 2s infinite;
+}
+
+.logo h1{
+font-size:30px;
+font-weight:800;
+}
+
+.logo p{
+font-size:14px;
+opacity:.8;
+margin-top:8px;
+}
+
+.pin-title{
+font-size:18px;
+font-weight:700;
+margin-bottom:25px;
+}
+
+.pin-display{
+display:flex;
+gap:12px;
+margin-bottom:40px;
+}
+
+.dot{
+width:16px;
+height:16px;
+border-radius:50%;
+border:2px solid white;
+transition:.2s;
+}
+
+.dot.active{
+background:white;
+transform:scale(1.1);
+}
+
+.keys{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+width:100%;
+max-width:300px;
+}
+
+.keys button{
+height:70px;
+width:70px;
+margin:auto;
+border:none;
+border-radius:50%;
+font-size:24px;
+font-weight:700;
+background:rgba(255,255,255,.12);
+color:white;
+backdrop-filter:blur(10px);
+cursor:pointer;
+transition:.2s;
+}
+
+.keys button:active{
+transform:scale(.9);
+background:rgba(255,255,255,.25);
+}
+
+.clear{
+background:#ef4444!important;
+}
+
+.unlock{
+background:#10b981!important;
+}
+
+.info{
+margin-top:25px;
+font-size:13px;
+opacity:.8;
+text-align:center;
+}
+
+.error{
+animation:shake .4s;
+}
+
+.success{
+animation:success .5s;
+}
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-10px)}
+50%{transform:translateX(10px)}
+75%{transform:translateX(-10px)}
+100%{transform:translateX(0)}
+}
+
+@keyframes pulse{
+0%{transform:scale(1)}
+50%{transform:scale(1.08)}
+100%{transform:scale(1)}
+}
+
+@keyframes success{
+0%{transform:scale(1)}
+50%{transform:scale(1.05)}
+100%{transform:scale(1)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="lock-container">
+
+<div class="logo">
+<i class="fa-solid fa-fingerprint"></i>
+<h1>MyWallet PH</h1>
+<p>Secure Digital Identity Wallet</p>
+</div>
+
+<div class="pin-title" id="pinTitle">
+Create Your 4-Digit PIN
+</div>
+
+<div class="pin-display">
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+</div>
+
+<div class="keys">
+<button onclick="addDigit('1')">1</button>
+<button onclick="addDigit('2')">2</button>
+<button onclick="addDigit('3')">3</button>
+
+<button onclick="addDigit('4')">4</button>
+<button onclick="addDigit('5')">5</button>
+<button onclick="addDigit('6')">6</button>
+
+<button onclick="addDigit('7')">7</button>
+<button onclick="addDigit('8')">8</button>
+<button onclick="addDigit('9')">9</button>
+
+<button class="clear" onclick="removeDigit()">
+<i class="fa-solid fa-delete-left"></i>
+</button>
+
+<button onclick="addDigit('0')">0</button>
+
+<button class="unlock" onclick="submitPin()">
+<i class="fa-solid fa-lock-open"></i>
+</button>
+</div>
+
+<div class="info">
+PIN is stored locally on your device
+</div>
+
+</div>
+
+<script>
+
+let enteredPin = "";
+
+const dots = document.querySelectorAll(".dot");
+const title = document.getElementById("pinTitle");
+
+const savedPin = localStorage.getItem("walletPin");
+
+if(savedPin){
+title.textContent = "Enter Your PIN";
+}
+
+function updateDots(){
+
+dots.forEach(dot=>{
+dot.classList.remove("active");
+});
+
+for(let i=0;i<enteredPin.length;i++){
+dots[i].classList.add("active");
+}
+
+}
+
+function addDigit(num){
+
+if(enteredPin.length >= 4) return;
+
+enteredPin += num;
+
+updateDots();
+
+if(enteredPin.length === 4){
+setTimeout(submitPin,200);
+}
+
+}
+
+function removeDigit(){
+
+enteredPin = enteredPin.slice(0,-1);
+
+updateDots();
+
+}
+
+function resetPin(){
+
+enteredPin = "";
+
+updateDots();
+
+}
+
+function submitPin(){
+
+if(enteredPin.length !== 4){
+return;
+}
+
+const existingPin =
+localStorage.getItem("walletPin");
+
+if(!existingPin){
+
+localStorage.setItem(
+"walletPin",
+enteredPin
+);
+
+document.querySelector(".lock-container")
+.classList.add("success");
+
+setTimeout(()=>{
+window.location.href="index.html";
+},500);
+
+return;
+
+}
+
+if(enteredPin === existingPin){
+
+document.querySelector(".lock-container")
+.classList.add("success");
+
+setTimeout(()=>{
+window.location.href="index.html";
+},500);
+
+}else{
+
+document.querySelector(".lock-container")
+.classList.add("error");
+
+setTimeout(()=>{
+document.querySelector(".lock-container")
+.classList.remove("error");
+},400);
+
+resetPin();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

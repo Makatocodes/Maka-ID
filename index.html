@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PH Digital ID Wallet</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], },
+                    colors: {
+                        brand: { 50: '#f0f4f8', 100: '#d9e3ed', 700: '#334e68', 800: '#243b53', 900: '#102a43', }
+                    }
+                }
+            }
+        }
+    </script>
+   
+</head>
+<body class="font-sans antialiased text-slate-800">
+
+    <div class="app-container">
+
+        <div id="screen-home" class="app-screen active bg-slate-50">
+            <div class="p-4 flex justify-between items-center bg-white sticky top-0 z-10 shadow-sm">
+                <span class="font-extrabold text-xl text-brand-900 tracking-tight flex items-center gap-2">
+                    <i class="fa-solid fa-fingerprint text-brand-700"></i> MyWallet PH
+                </span>
+                <button class="relative p-2 text-slate-600 hover:text-brand-900 transition-colors">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                </button>
+            </div>
+
+            <div class="px-4 py-4">
+                <div class="bg-gradient-to-br from-brand-800 to-slate-900 text-white p-6 rounded-2xl relative overflow-hidden shadow-lg border border-slate-700">
+                    <div class="relative z-10 w-3/4">
+                        <h3 class="font-bold text-lg leading-tight mb-2">Centralized Digital Identity</h3>
+                        <p class="text-xs text-slate-300 mb-4">Securely store your National ID, PhilHealth, SSS, and more in one place.</p>
+                        <button onclick="switchScreen('add')" class="bg-white text-brand-900 font-bold text-xs px-5 py-2.5 rounded-lg shadow-sm active:scale-95 transition-transform"><i class="fa-solid fa-plus"></i> Add New ID</button>
+                    </div>
+                    <div class="absolute right-[-15px] bottom-[-25px] text-white/5 text-9xl">
+                        <i class="fa-solid fa-address-card"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4 pb-2">
+                <h4 class="font-bold text-sm text-slate-800 uppercase tracking-wide mb-3">Supported Documents</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-lg"><i class="fa-solid fa-flag"></i></div>
+                        <span class="text-xs font-bold text-slate-700">National ID</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-lg"><i class="fa-solid fa-briefcase-medical"></i></div>
+                        <span class="text-xs font-bold text-slate-700">PhilHealth</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg"><i class="fa-solid fa-building-columns"></i></div>
+                        <span class="text-xs font-bold text-slate-700">SSS ID</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-lg"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <span class="text-xs font-bold text-slate-700">TIN ID</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-add" class="app-screen bg-white">
+            <div class="p-4 flex items-center bg-white border-b border-slate-100 sticky top-0 z-10">
+                <button onclick="switchScreen('home')" class="w-10 h-10 flex items-center justify-center bg-slate-100 rounded-full text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-arrow-left"></i></button>
+                <span class="font-bold text-sm ml-4">Create Virtual ID</span>
+            </div>
+
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Select ID Type</label>
+                    <select id="id-type" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-lg focus:ring-brand-700 focus:border-brand-700 block p-3">
+                        <option value="national">PhilSys National ID</option>
+                        <option value="philhealth">PhilHealth ID</option>
+                        <option value="sss">SSS UMID</option>
+                        <option value="tin">BIR TIN ID</option>
+                        <option value="work">Work / Company ID</option>
+                        <option value="school">School / Student ID</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
+                    <input type="text" id="id-name" placeholder="e.g. Juan De La Cruz" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-lg focus:ring-brand-700 focus:border-brand-700 block p-3">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">ID Number</label>
+                    <input type="text" id="id-number" placeholder="e.g. 1234-5678-9000" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-lg focus:ring-brand-700 focus:border-brand-700 block p-3">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Additional Info (Role/DOB/Branch)</label>
+                    <input type="text" id="id-extra" placeholder="e.g. Software Engineer / 01-01-1990" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-lg focus:ring-brand-700 focus:border-brand-700 block p-3">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Upload ID Photo (Optional)</label>
+                    <input type="file" id="id-photo" accept="image/*" class="w-full text-sm text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="generateAndSaveID()" class="w-full bg-brand-900 hover:bg-brand-800 text-white font-bold text-[15px] py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-microchip"></i> Generate & Save Virtual ID
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-wallet" class="app-screen bg-slate-50">
+            <div class="p-4 flex justify-between items-center bg-white border-b border-slate-100 sticky top-0 z-10 shadow-sm">
+                <span class="font-bold text-lg text-slate-800">My Virtual Wallet</span>
+                <button onclick="clearWallet()" title="Clear All Data" class="w-10 h-10 flex items-center justify-center text-red-500 bg-red-50 hover:bg-red-100 rounded-full transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+
+            <div class="p-4 flex-1">
+                <div id="wallet-cards-container" class="space-y-6">
+                    </div>
+            </div>
+        </div>
+
+<div id="screen-profile" class="app-screen bg-white">
+    <div class="p-4 flex justify-center items-center bg-white border-b border-slate-100 sticky top-0 z-10">
+        <span class="font-bold text-lg">Settings & Profile</span>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="flex flex-col items-center pt-8 pb-6 border-b border-slate-100">
+        <div class="w-24 h-24 rounded-full overflow-hidden bg-slate-200 border-4 border-white shadow-lg">
+            <img id="profileImage"
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                class="w-full h-full object-cover">
+        </div>
+
+<h2 id="settingsProfileName"
+    class="font-extrabold text-xl text-slate-800 mt-3">
+    Local User
+</h2>
+
+        <p class="text-sm text-brand-700 font-medium mt-1">
+            Data saved locally on device
+        </p>
+
+        <span class="mt-3 text-[10px] bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <i class="fa-solid fa-shield-halved"></i> Privacy First
+        </span>
+    </div>
+
+    <!-- Settings Menu -->
+    <div class="p-4 space-y-3">
+
+        <!-- My Profile -->
+        <!-- My Profile -->
+<div onclick="window.location.href='profile.html'"
+    class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer hover:bg-slate-50 transition">
+
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div>
+            <h4 class="font-bold text-sm">My Profile</h4>
+<p 
+   class="text-xs text-slate-500">
+    View name and profile picture
+</p>
+        </div>
+    </div>
+
+    <i class="fa-solid fa-chevron-right text-slate-400"></i>
+
+</div>
+
+        <!-- Security -->
+        <div onclick="window.location.href='security.html'"
+     class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm">Security & Privacy</h4>
+                    <p class="text-xs text-slate-500">PIN, biometrics and local protection</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+        </div>
+
+        <!-- About App -->
+        <div onclick="window.location.href='about.html'"
+      class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm">About App</h4>
+                    <p class="text-xs text-slate-500">Version information and features</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+        </div>
+
+        <!-- Rate App -->
+        <div onclick="window.location.href='rating.html'"
+     class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm">Rate This App</h4>
+                    <p class="text-xs text-slate-500">Tell us your experience</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+        </div>
+
+        <!-- Storage Info -->
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fa-solid fa-database text-brand-700"></i>
+                <h4 class="font-bold text-sm">Local Storage</h4>
+            </div>
+            <p class="text-xs text-slate-500">
+                All virtual cards and uploaded photos are stored entirely
+                within your browser's local storage. No data is sent to any server.
+            </p>
+        </div>
+
+        <!-- Logout -->
+        <button onclick="logoutApp()"
+            class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-xl shadow-lg mt-3">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+
+    </div>
+</div>
+
+        <div class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-200 flex justify-around items-center px-2 py-2 z-50 pb-safe shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.02)]">
+            <button onclick="switchScreen('home')" class="nav-btn flex flex-col items-center justify-center gap-1 w-16 group active" data-target="home">
+                <div class="w-12 h-8 rounded-full flex items-center justify-center group-[.active]:bg-brand-100 transition-colors text-slate-400 group-[.active]:text-brand-900">
+                    <i class="fa-solid fa-house text-lg"></i>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400 group-[.active]:text-brand-900">Home</span>
+            </button>
+            
+            <button onclick="switchScreen('add')" class="nav-btn flex flex-col items-center justify-center gap-1 w-16 group" data-target="add">
+                <div class="w-12 h-8 rounded-full flex items-center justify-center group-[.active]:bg-brand-100 transition-colors text-slate-400 group-[.active]:text-brand-900">
+                    <i class="fa-solid fa-square-plus text-lg"></i>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400 group-[.active]:text-brand-900">Create</span>
+            </button>
+            
+            <button onclick="switchScreen('wallet')" class="nav-btn flex flex-col items-center justify-center gap-1 w-16 group" data-target="wallet">
+                <div class="w-12 h-8 rounded-full flex items-center justify-center group-[.active]:bg-brand-100 transition-colors text-slate-400 group-[.active]:text-brand-900">
+                    <i class="fa-solid fa-wallet text-lg"></i>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400 group-[.active]:text-brand-900">Wallet</span>
+            </button>
+            
+            <button onclick="switchScreen('profile')" class="nav-btn flex flex-col items-center justify-center gap-1 w-16 group" data-target="profile">
+                <div class="w-12 h-8 rounded-full flex items-center justify-center group-[.active]:bg-brand-100 transition-colors text-slate-400 group-[.active]:text-brand-900">
+                    <i class="fa-regular fa-user text-lg"></i>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400 group-[.active]:text-brand-900">Profile</span>
+            </button>
+        </div>
+
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ==========================
+    // LOAD PROFILE NAME
+    // ==========================
+    const savedName =
+        localStorage.getItem("walletProfileName");
+
+    if (savedName) {
+
+        const settingsProfileName =
+            document.getElementById("settingsProfileName");
+
+        const profileCardName =
+            document.getElementById("profileCardName");
+
+        if (settingsProfileName) {
+            settingsProfileName.textContent = savedName;
+        }
+
+        if (profileCardName) {
+            profileCardName.textContent = savedName;
+        }
+    }
+
+    // ==========================
+    // LOAD PROFILE IMAGE
+    // ==========================
+    const savedImage =
+        localStorage.getItem("walletProfileImage");
+
+    if (savedImage) {
+
+        const profileImage =
+            document.getElementById("profileImage");
+
+        if (profileImage) {
+            profileImage.src = savedImage;
+        }
+    }
+
+});
+
+
+// ==========================
+// RETURN TO PROFILE SECTION
+// ==========================
+window.addEventListener("load", function () {
+
+    const openScreen =
+        localStorage.getItem("openScreen");
+
+    if (
+        openScreen === "profile" &&
+        typeof switchScreen === "function"
+    ) {
+
+        setTimeout(() => {
+
+            switchScreen("profile");
+
+            document
+                .querySelectorAll(".nav-btn")
+                .forEach(btn =>
+                    btn.classList.remove("active")
+                );
+
+            const profileBtn =
+                document.querySelector(
+                    '[data-target="profile"]'
+                );
+
+            if (profileBtn) {
+                profileBtn.classList.add("active");
+            }
+
+            localStorage.removeItem(
+                "openScreen"
+            );
+
+        }, 300);
+    }
+
+});
+</script>
+  <script src="js/app.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/profile.js"></script>
+   
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MakaID App Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f4f8',
+                            100: '#d9e3ed',
+                            700: '#334e68',
+                            800: '#243b53',
+                            900: '#102a43',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* A subtle background to make the phone pop */
+            background-color: #e2e8f0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        /* Hide scrollbar for the app screens for realism */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .app-screen {
+            display: none; /* Hidden by default, toggled via JS */
+        }
+        .app-screen.active {
+            display: flex; /* Active screen flex layout */
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-800 p-4">
+
+    <div class="relative border-[14px] border-slate-900 bg-white rounded-[3rem] shadow-2xl w-[375px] h-[812px] overflow-hidden flex flex-col">
+        
+        <div class="absolute top-0 inset-x-0 flex justify-center z-50">
+            <div class="bg-slate-900 h-6 w-32 rounded-b-3xl"></div>
+        </div>
+
+        <div class="h-12 bg-white flex items-end justify-between px-6 pb-2 text-xs font-semibold select-none z-40 shrink-0">
+            <span>9:41</span>
+            <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full text-sm"></i>
+            </div>
+        </div>
+
+        <div id="screen-home" class="app-screen active flex-1 bg-slate-50 flex-col overflow-y-auto no-scrollbar pb-20">
+            <div class="p-4 flex justify-between items-center bg-white">
+                <span class="font-extrabold text-lg text-brand-900 tracking-tight flex items-center gap-2">
+                    <i class="fa-solid fa-id-card-clip text-brand-700"></i> MakaID
+                </span>
+                <button class="relative p-2 text-slate-600">
+                    <i class="fa-regular fa-bell text-lg"></i>
+                    <span class="absolute top-1.5 right-1.5 bg-red-500 w-2 h-2 rounded-full border border-white"></span>
+                </button>
+            </div>
+
+            <div class="px-4 py-2">
+                <div class="bg-brand-800 text-white p-5 rounded-2xl relative overflow-hidden shadow-lg">
+                    <div class="relative z-10 w-2/3">
+                        <h3 class="font-bold text-[1.1rem] leading-tight mb-3">Securely Manage All Your IDs</h3>
+                        <button class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all border border-white/10">Stay Now</button>
+                    </div>
+                    <div class="absolute right-[-10px] bottom-[-20px] text-white/10 text-8xl">
+                        <i class="fa-solid fa-address-card"></i>
+                    </div>
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 w-20 h-14 bg-white/20 backdrop-blur-md rounded-lg border border-white/30 p-1 flex items-center gap-1 shadow-inner rotate-[-5deg]">
+                        <div class="w-4 h-5 bg-slate-200 rounded-sm"></div>
+                        <div class="flex-1 space-y-1">
+                            <div class="h-1 bg-white/50 rounded w-full"></div>
+                            <div class="h-1 bg-white/50 rounded w-2/3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4 py-4 grid grid-cols-3 gap-3">
+                <div class="bg-white p-3 rounded-2xl shadow-sm text-center flex flex-col items-center justify-center gap-2 cursor-pointer border border-transparent hover:border-brand-100">
+                    <div class="text-brand-700 text-xl"><i class="fa-regular fa-id-badge"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 leading-tight">Personal<br>IDs</span>
+                </div>
+                <div onclick="switchScreen('wallet')" class="bg-white p-3 rounded-2xl shadow-sm text-center flex flex-col items-center justify-center gap-2 cursor-pointer border border-transparent hover:border-brand-100">
+                    <div class="text-brand-700 text-xl"><i class="fa-solid fa-wallet"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 leading-tight">Digital<br>Wallets</span>
+                </div>
+                <div onclick="switchScreen('product')" class="bg-white p-3 rounded-2xl shadow-sm text-center flex flex-col items-center justify-center gap-2 cursor-pointer border border-transparent hover:border-brand-100">
+                    <div class="text-brand-700 text-xl"><i class="fa-solid fa-file-shield"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 leading-tight">Professional<br>Certs</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl shadow-sm text-center flex flex-col items-center justify-center gap-2 cursor-pointer border border-transparent hover:border-brand-100">
+                    <div class="text-brand-700 text-xl"><i class="fa-solid fa-plane-departure"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 leading-tight">Travel<br>Documents</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl shadow-sm text-center flex flex-col items-center justify-center gap-2 cursor-pointer border border-transparent hover:border-brand-100">
+                    <div class="text-brand-700 text-xl"><i class="fa-solid fa-users"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 leading-tight">Family<br>Records</span>
+                </div>
+            </div>
+
+            <div class="px-4">
+                <div class="flex justify-between items-end mb-3">
+                    <h4 class="font-bold text-sm text-slate-800">Top Categories</h4>
+                    <a href="#" class="text-[10px] font-semibold text-slate-400">View all</a>
+                </div>
+                <div class="bg-white rounded-2xl p-3 shadow-sm flex items-center justify-between border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-10 bg-slate-800 rounded flex items-center justify-center overflow-hidden">
+                             <i class="fa-solid fa-image text-slate-400"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800">Premium ID Folder</p>
+                            <p class="text-[10px] text-slate-400">Verified</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-product" class="app-screen flex-1 bg-white flex-col overflow-y-auto no-scrollbar pb-20">
+            <div class="p-4 flex justify-between items-center">
+                <button onclick="switchScreen('home')" class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-600"><i class="fa-solid fa-chevron-left"></i></button>
+                <span class="font-bold text-sm"></span>
+                <button onclick="switchScreen('wallet')" class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-600"><i class="fa-solid fa-cart-shopping text-xs"></i></button>
+            </div>
+
+            <div class="flex justify-center py-6 bg-slate-50 border-b border-slate-100 mb-4">
+                <div class="relative w-40 h-48 bg-slate-800 rounded-xl shadow-2xl flex items-center justify-center transform perspective-1000 rotate-y-12">
+                    <div class="absolute inset-2 border border-slate-700 rounded-lg"></div>
+                    <div class="w-16 h-20 bg-white rounded flex flex-col items-center p-1 shadow-inner">
+                        <div class="w-full h-10 bg-slate-200 rounded-sm mb-1 flex items-center justify-center overflow-hidden">
+                            <i class="fa-solid fa-user text-slate-400"></i>
+                        </div>
+                        <div class="w-full h-1 bg-slate-300 rounded mb-1"></div>
+                        <div class="w-2/3 h-1 bg-slate-300 rounded self-start"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 space-y-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">The Premium ID Folder</h2>
+                    <div class="flex items-center gap-1 text-amber-400 text-[10px] mt-1">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        <span class="text-slate-400 ml-1">(9)</span>
+                    </div>
+                </div>
+
+                <div class="text-xl font-black text-slate-800">$750.00</div>
+
+                <div class="space-y-1">
+                    <h4 class="font-bold text-xs text-slate-800 mb-2">Specifications</h4>
+                    <p class="text-[11px] text-slate-500">• Photo - Premium ID Folder</p>
+                    <p class="text-[11px] text-slate-500">• Phantmon: Space</p>
+                    <p class="text-[11px] text-slate-500">• Premium materials : O.E.Xtra</p>
+                    <p class="text-[11px] text-slate-500">• Specification Verification: 2.50mm</p>
+                    <p class="text-[11px] text-slate-500">• Specification-Sized: Standard</p>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white via-white to-transparent">
+                <button onclick="switchScreen('wallet')" class="w-full bg-slate-800 text-white font-bold text-sm py-4 rounded-2xl shadow-lg">Add to Wallet</button>
+            </div>
+        </div>
+
+        <div id="screen-wallet" class="app-screen flex-1 bg-slate-50 flex-col overflow-y-auto no-scrollbar pb-20">
+            <div class="p-4 flex justify-between items-center bg-white border-b border-slate-100">
+                <button onclick="switchScreen('home')" class="text-slate-600"><i class="fa-solid fa-arrow-left"></i></button>
+                <span class="font-bold text-sm">Wallet</span>
+                <button class="text-slate-600"><i class="fa-regular fa-square-plus"></i></button>
+            </div>
+
+            <div class="p-4 space-y-4">
+                
+                <div class="bg-gradient-to-r from-slate-200 to-slate-300 p-4 rounded-2xl shadow-sm border border-white">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-bold text-slate-700 tracking-wider">DIGITAL WALLET</span>
+                        <i class="fa-solid fa-id-card text-slate-400"></i>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-16 h-20 bg-slate-400 rounded-lg overflow-hidden border-2 border-white shadow-inner flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie text-2xl text-slate-200"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] text-slate-500 uppercase">Cardholder</p>
+                            <p class="text-sm font-bold text-slate-800 leading-none mb-2">Limuel J.</p>
+                            <div class="w-full h-1.5 bg-slate-400/20 rounded mt-1"></div>
+                            <div class="w-2/3 h-1.5 bg-slate-400/20 rounded mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-brand-800 text-white p-4 rounded-2xl shadow-md">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-bold tracking-wider text-slate-300 flex items-center gap-1">
+                            <i class="fa-brands fa-nfc-symbol"></i> DIGITAL ID
+                        </span>
+                        <span class="text-[10px] text-slate-400">11/24</span>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <i class="fa-solid fa-sim-card text-2xl text-amber-400 rotate-90"></i>
+                        <div class="flex gap-[-5px]">
+                            <div class="w-5 h-5 rounded-full bg-red-500 opacity-80 mix-blend-multiply"></div>
+                            <div class="w-5 h-5 rounded-full bg-amber-500 opacity-80 mix-blend-multiply -ml-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center px-1 pt-2">
+                    <span class="font-bold text-sm text-slate-800">Total Cards</span>
+                    <span class="text-sm text-slate-500">150 Card</span>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100">
+                <button class="w-full bg-slate-200 text-slate-800 font-bold text-sm py-3.5 rounded-2xl mb-2 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-folder-open"></i> Vaulted
+                </button>
+                <button class="w-full bg-brand-900 text-white font-bold text-sm py-3.5 rounded-2xl shadow-lg">
+                    Checkout
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-profile" class="app-screen flex-1 bg-slate-50 flex-col overflow-y-auto no-scrollbar pb-20">
+            <div class="p-4 flex justify-between items-center bg-white">
+                <button onclick="switchScreen('home')" class="text-slate-600"><i class="fa-solid fa-arrow-left"></i></button>
+                <span class="font-bold text-sm">Profile</span>
+                <button class="text-slate-600"><i class="fa-regular fa-user"></i></button>
+            </div>
+
+            <div class="bg-white flex flex-col items-center pt-2 pb-6 border-b border-slate-100">
+                <div class="w-20 h-20 rounded-full bg-slate-200 border-4 border-white shadow-md mb-3 flex items-center justify-center overflow-hidden">
+                    <img src="https://ui-avatars.com/api/?name=Limuel+Ganal&background=0D8ABC&color=fff&size=128" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                <h2 class="font-bold text-lg text-slate-800">Limuel Ganal</h2>
+                <p class="text-xs text-slate-500">Content Curator</p>
+            </div>
+
+            <div class="mt-2 bg-white border-y border-slate-100">
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-regular fa-id-card w-5 text-center text-brand-700"></i> Personal ID
+                    </div>
+                    <i class="fa-solid fa-circle-plus text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-solid fa-wallet w-5 text-center text-brand-700"></i> Digital Wallets
+                    </div>
+                    <i class="fa-solid fa-circle-plus text-slate-300 text-xs"></i>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-white border-y border-slate-100 pb-4">
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50 cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-regular fa-user w-5 text-center"></i> Account Settings
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50 cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-solid fa-box w-5 text-center"></i> Subscription Plan
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50 cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-solid fa-download w-5 text-center"></i> Download History
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50 cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-solid fa-wrench w-5 text-center"></i> My Repair History
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center border-b border-slate-50 cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-regular fa-circle-question w-5 text-center"></i> Help & Support
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+                <div class="px-4 py-3.5 flex justify-between items-center cursor-pointer">
+                    <div class="flex items-center gap-3 text-sm text-slate-700">
+                        <i class="fa-solid fa-circle-info w-5 text-center"></i> About Us
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 inset-x-0 h-[84px] bg-white border-t border-slate-100 flex justify-between items-start px-6 pt-3 pb-6 z-50">
+            <button onclick="switchScreen('home')" class="nav-btn flex flex-col items-center gap-1 w-12 group" data-target="home">
+                <i class="fa-solid fa-house text-lg text-slate-400 group-[.active]:text-brand-900 transition-colors"></i>
+                <span class="text-[9px] font-medium text-slate-400 group-[.active]:text-brand-900">Home</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-12 group" data-target="categories">
+                <i class="fa-solid fa-laye
